@@ -5,7 +5,7 @@ from atproto import Client
 
 
 import requests
-
+import inspirobot
 
 import datetime as dt
 import pytz
@@ -27,10 +27,10 @@ def BSkeet(img):
         with open(img, 'rb') as r: 
             client.send_image(text=dt_east.strftime('%a %d %b'), image= r, image_alt="randomly generated inspirational meme")
         with open('log.txt','a') as a:
-            a.write(dt_east.strftime('%a %d %b') + ': Success!')
+            a.write("\n" + dt_east.strftime('%a %d %b: %H:%M:%S') + ': Success!')
     except Exception as e:
         with open('log.txt','a') as a:
-            a.write(f"{dt_east.strftime('%a %d %b')}: Error - {e}, {e.args}")
+            a.write("\n" + f"{dt_east.strftime('%a %d %b: %H:%M:%S')}: Error - {e}, {e.args}")
 
 
 
@@ -71,22 +71,18 @@ logtime_utcnow = dt.datetime.now()
 lt_east = tz.localize(logtime_utcnow)
 
 with open('log.txt','a') as a:
-            a.write(lt_east.strftime('%a %d %b') + ': Started!')
+            a.write("\n" + lt_east.strftime('%a %d %b: %H:%M:%S') + ': Started!')
 
 while True:
     dt_utcnow = dt.datetime.now()
 
     dt_east = tz.localize(dt_utcnow)
 
-    try:
-        if str(dt_east.strftime('%H:%M')) == '12:00':
-            main()
-            time.sleep(60)
-    except KeyboardInterrupt:
-       with open('log.txt','a') as a:
-            a.write(dt_east.strftime('%a %d %b') + ': App Closed') 
-            exit()
-    
+    if str(dt_east.strftime('%H:%M')) == '12:00':
+        main()
+        time.sleep(60)
+
+
         
 
 
