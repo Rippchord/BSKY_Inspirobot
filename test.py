@@ -29,9 +29,17 @@ def BSkeet(img):
 
     client = Client()
     client.login(os.getenv('BOT_USERNAME'), os.getenv('PASSWORD'))
-    print('It worked!')
-    with open(img, 'rb') as r: 
-        client.send_image(text=dt_east.strftime('%a %d %b'), image= r, image_alt="randomly generated inspirational meme")
+    try: 
+        with open(img, 'rb') as r: 
+            client.send_image(text=dt_east.strftime('%a %d %b'), image= r, image_alt="randomly generated inspirational meme")
+        with open('log.txt','a') as a:
+            a.write(dt_east.strftime('%a %d %b') + ': Success!')
+    except Exception as e:
+        with open('log.txt','a') as a:
+            a.write(f"{dt_east.strftime('%a %d %b')}: Error - {e}, {e.args}")
+
+
+
 
 
 
