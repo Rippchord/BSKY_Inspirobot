@@ -25,13 +25,13 @@ dt_east = tz.localize(dt_utcnow)
 
 
 
-def BSkeet(func):
-    def wrapper():
-        client = Client()
-        client.login(os.getenv('BOT_USERNAME'), os.getenv('PASSWORD'))
-        with open(wrapper(), 'rb') as r: 
-            client.send_image(text=dt_east.strftime('%a %d %b'), image= r, image_alt="randomly generated inspirational meme")
-    return wrapper
+def BSkeet(img):
+
+    client = Client()
+    client.login(os.getenv('BOT_USERNAME'), os.getenv('PASSWORD'))
+    print('It worked!')
+    with open(img, 'rb') as r: 
+        client.send_image(text=dt_east.strftime('%a %d %b'), image= r, image_alt="randomly generated inspirational meme")
 
 
 
@@ -39,21 +39,14 @@ def BSkeet(func):
 
 
 
-@BSkeet
-def download_file():
-    if filename:
-        pass
-    else: 
-        filename = 'temp'
-
-    def wrapper():
-        with requests.get(generateInspo()) as req:
-            with open(filename, 'wb') as f:
-                for chunk in req.iter_content(chunk_size=8192):
-                    if chunk:
-                        f.write(chunk) 
-            return wrapper
-        return filename
+def download_file(func):
+    image = func()
+    with requests.get(image) as req:
+        with open('temp.jpg', 'wb') as f:
+            for chunk in req.iter_content(chunk_size=8192):
+                if chunk:
+                    f.write(chunk) 
+        return f
 
     
 
@@ -64,24 +57,20 @@ def generateInspo():
     
 
 def main():
-    download_file()
-
-main()
-# generateInspo()
+    download_file(generateInspo)
+    BSkeet('temp.jpg')
 
 
 
-# while True:
-#     dt_utcnow = dt.datetime.now()
 
-#     dt_east = tz.localize(dt_utcnow)
+while True:
+    dt_utcnow = dt.datetime.now()
 
-#     if str(dt_east.strftime('%H:%M')) == '12:00':
-#         print('It\'s time!')
-#         time.sleep(60)
+    dt_east = tz.localize(dt_utcnow)
+
+    if str(dt_east.strftime('%H:%M')) == '12:00':
+        main()
+        time.sleep(60)
         
-    # ==  dt.time(22,47,00):
-    #     print("It's time")
-
 
 
