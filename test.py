@@ -19,12 +19,6 @@ load_dotenv()
 tz = pytz.timezone('America/New_York')
 
 
-dt_utcnow = dt.datetime.now()
-
-dt_east = tz.localize(dt_utcnow)
-
-
-
 def BSkeet(img):
 
     client = Client()
@@ -70,15 +64,29 @@ def main():
 
 
 
+print('Waiting')
+
+logtime_utcnow = dt.datetime.now()
+
+lt_east = tz.localize(logtime_utcnow)
+
+with open('log.txt','a') as a:
+            a.write(lt_east.strftime('%a %d %b') + ': Started!')
 
 while True:
     dt_utcnow = dt.datetime.now()
 
     dt_east = tz.localize(dt_utcnow)
 
-    if str(dt_east.strftime('%H:%M')) == '12:00':
-        main()
-        time.sleep(60)
+    try:
+        if str(dt_east.strftime('%H:%M')) == '12:00':
+            main()
+            time.sleep(60)
+    except KeyboardInterrupt:
+       with open('log.txt','a') as a:
+            a.write(dt_east.strftime('%a %d %b') + ': App Closed') 
+            exit()
+    
         
 
 
